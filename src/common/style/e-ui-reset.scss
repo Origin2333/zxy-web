@@ -1,0 +1,9 @@
+/*
+ 用于重写Element的样式
+ */
+ .el-menu{
+     border: 0px !important;
+ }
+ .el-menu.el-menu--horizontal {
+    border-bottom: 0px !important;
+}

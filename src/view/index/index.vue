@@ -1,24 +1,33 @@
 <template>
     <div class="index">
         <div class="left-filter">
-            <el-select
-                v-model="lawName"
-                filterable
-                remote
-                reserve-keyword
-                placeholder="请输入关键词"
-                :remote-method="remoteMethod"
-                :loading="loading"
-                class="select"
-                @change="querylawById">
-                <el-option
-                v-for="item in options"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-                </el-option>
-            </el-select>
-            <el-tree :data="lawTree" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+            <div  class="select">
+                <el-select
+                    v-model="lawName"
+                    filterable
+                    remote
+                    reserve-keyword
+                    placeholder="请输入关键词"
+                    :remote-method="remoteMethod"
+                    :loading="loading"
+                    style="width:100%;"
+                    @change="querylawById">
+                    <el-option
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                    </el-option>
+                </el-select>
+            </div>
+            <el-divider></el-divider>
+            <div class="tree">
+                <el-tree :data="lawTree" :props="defaultProps" @node-click="handleNodeClick" default-expand-all>
+                    <span class="custom-tree-node" slot-scope="{ node }">
+                        <span :title="node.label">{{ node.label }}</span>
+                    </span>
+                </el-tree>
+            </div>
         </div>
         <div class="right-charts" ref="lawChart"></div>
     </div>
@@ -156,6 +165,14 @@ export default {
         padding: 20px;
         .select{
             width: 400px;
+            margin: 0 auto;
+        }
+        .tree{
+            width: 400px;
+            margin: 0 auto;
+            .el-tree{
+                background: transparent;
+            }
         }
     }
     .right-charts{

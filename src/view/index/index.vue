@@ -13,7 +13,7 @@
                     style="width:100%;"
                     @change="querylawById">
                     <el-option
-                    v-for="item in options"
+                    v-for="item in lawNames"
                     :key="item.id"
                     :label="item.name"
                     :value="item.id">
@@ -22,14 +22,19 @@
             </div>
             <el-divider></el-divider>
             <div class="tree">
-                <el-tree :data="lawTree" :props="defaultProps" @node-click="handleNodeClick" default-expand-all>
+                <el-tree :data="lawTree" :props="defaultProps" @node-click="clickNode" default-expand-all>
                     <span class="custom-tree-node" slot-scope="{ node }">
                         <span :title="node.label">{{ node.label }}</span>
                     </span>
                 </el-tree>
             </div>
         </div>
-        <div class="right-charts" ref="lawChart"></div>
+        <div class="right-charts">
+            <div class="chart1" ref="lawChart"></div>
+            <div class="chart2" ref="keyWordChart"></div>
+            <div class="chart3" ref="departmentChart"></div>
+            <div class="chart4" ref="sonLawChart"></div>
+        </div>
     </div>
 </template>
 
@@ -41,7 +46,7 @@ export default {
     data () {
         return {
             lawName: '',
-            options: [],
+            lawNames: [],
             loading: true,
             lawTree: [],
             defaultProps: {
@@ -51,7 +56,10 @@ export default {
         }
     },
     mounted () {
-
+        this.myChart = echarts.init(this.$refs.lawChart);
+        this.keyWordChart = echarts.init(this.$refs.keyWordChart);
+        this.departmentChart = echarts.init(this.$refs.departmentChart);
+        this.sonLawChart = echarts.init(this.$refs.sonLawChart);
     },
     methods: {
         remoteMethod (query) {
@@ -61,7 +69,7 @@ export default {
                 Axios.get('/law/getLawList?name=' + query)
                 .then(res => {
                     this.loading = false
-                    _this.options = res.data.data
+                    _this.lawNames = res.data.data
                 })
             }
         },
@@ -117,7 +125,7 @@ export default {
 
         },
         showLawChart (lawTree) {
-            var myChart = echarts.init(this.$refs.lawChart);
+            var _this = this;
             var option = {
                 tooltip: {
                     trigger: 'item',
@@ -144,8 +152,8 @@ export default {
                         animationDurationUpdate: 750,
                         label: {
                             formatter: function (val) {
-                                if (val.name.length > 15) {
-                                    return val.name.substring(0, 15) + '...';
+                                if (val.name.length > 6) {
+                                    return val.name.substring(0, 6) + '...';
                                 } else {
                                     return val.name;
                                 }
@@ -154,7 +162,79 @@ export default {
                     }
                 ]
             }
-            myChart.setOption(option);
+            this.myChart.setOption(option);
+            function clickFun (param) {
+                _this.clickNode(param.data)
+            }
+            this.myChart.on('click', clickFun);
+        },
+        clickNode (node) {
+            debugger
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove',
+                    extraCssText: 'width: 300px; white-space: pre-wrap'
+                },
+                series: [
+                    {
+                        type: 'tree',
+                        data: [],
+                        top: '18%',
+                        bottom: '14%',
+                        layout: 'radial',
+                        symbol: 'emptyCircle',
+                        symbolSize: 7,
+                        initialTreeDepth: 3,
+                        animationDurationUpdate: 750,
+                        label: {
+                            formatter: function (val) {
+                                if (val.name.length > 6) {
+                                    return val.name.substring(0, 6) + '...';
+                                } else {
+                                    return val.name;
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+            if (node.hasOwnProperty('keyWordId')) {
+                Axios.get('/law/getLawListByKeyWordId?keyWordId=' + node.keyWordId)
+                .then(res => {
+                    var data = [{
+                        name: node.name,
+                        children: res.data.data ? res.data.data : []
+                    }]
+                    option.series[0].data = data;
+                    this.keyWordChart.clear();
+                    this.keyWordChart.setOption(option);
+                })
+            }
+            if (node.hasOwnProperty('departmentId')) {
+                Axios.get('/law/getLawListByDepartmentId?departmentId=' + node.departmentId)
+                .then(res => {
+                    var data = [{
+                        name: node.name,
+                        children: res.data.data ? res.data.data : []
+                    }]
+                    option.series[0].data = data;
+                    this.departmentChart.clear();
+                    this.departmentChart.setOption(option);
+                })
+            }
+            if (node.hasOwnProperty('lawId')) {
+                Axios.get('/law/getLawListByLawId?lawId=' + node.lawId)
+                .then(res => {
+                    var data = [{
+                        name: node.name,
+                        children: res.data.data ? res.data.data : []
+                    }]
+                    option.series[0].data = data;
+                    this.sonLawChart.clear();
+                    this.sonLawChart.setOption(option);
+                })
+            }
         }
     }
 }
@@ -192,6 +272,35 @@ export default {
     }
     .right-charts{
         flex-grow: 1;
+        text-align: center;
+        .chart1{
+            display: inline-block;
+            width: 48%;
+            height: 50%;
+            border: 1px solid rgba(234,237,241,1);
+            text-align: left;
+        }
+        .chart2{
+            display: inline-block;
+            width: 48%;
+            height: 50%;
+            border: 1px solid rgba(234,237,241,1);
+            text-align: left;
+        }
+        .chart3{
+            display: inline-block;
+            width: 48%;
+            height: 50%;
+            border: 1px solid rgba(234,237,241,1);
+            text-align: left;
+        }
+        .chart4{
+            display: inline-block;
+            width: 48%;
+            height: 50%;
+            border: 1px solid rgba(234,237,241,1);
+            text-align: left;
+        }
     }
 }
 </style>

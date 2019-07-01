@@ -66,10 +66,8 @@ export default {
             }
         },
         querylawById (id) {
-            debugger
             Axios.get('/law/getLawDetail?id=' + id)
             .then(res => {
-                debugger
                 let result = res.data.data;
                 this.lawTree.push({
                     name: result.name,
@@ -123,7 +121,8 @@ export default {
             var option = {
                 tooltip: {
                     trigger: 'item',
-                    triggerOn: 'mousemove'
+                    triggerOn: 'mousemove',
+                    extraCssText: 'width: 300px; white-space: pre-wrap'
                 },
                 series: [
                     {
@@ -142,12 +141,19 @@ export default {
 
                         initialTreeDepth: 3,
 
-                        animationDurationUpdate: 750
-
+                        animationDurationUpdate: 750,
+                        label: {
+                            formatter: function (val) {
+                                if (val.name.length > 15) {
+                                    return val.name.substring(0, 15) + '...';
+                                } else {
+                                    return val.name;
+                                }
+                            }
+                        }
                     }
                 ]
             }
-            debugger
             myChart.setOption(option);
         }
     }

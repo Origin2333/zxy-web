@@ -173,6 +173,15 @@ export default {
             .el-tree{
                 background: transparent;
             }
+            .custom-tree-node{
+                width: 300px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                text-align: left;
+                font-size: 14px;
+                line-height: 24px;
+            }
         }
     }
     .right-charts{

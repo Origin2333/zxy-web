@@ -169,7 +169,6 @@ export default {
             this.myChart.on('click', clickFun);
         },
         clickNode (node) {
-            debugger
             var option = {
                 tooltip: {
                     trigger: 'item',

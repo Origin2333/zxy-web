@@ -23,10 +23,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="开始时间" prop="startTime">
-                    <el-date-picker type="date" placeholder="选择日期" format='yyyy-MM-dd' v-model="ruleForm.startTime" style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" placeholder="选择日期" value-format='yyyy-MM-dd' v-model="ruleForm.startTime" style="width: 100%;"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="结束时间" prop="endTime">
-                    <el-date-picker type="date" placeholder="选择日期" format='yyyy-MM-dd' v-model="ruleForm.endTime" style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" placeholder="选择日期" value-format='yyyy-MM-dd' v-model="ruleForm.endTime" style="width: 100%;"></el-date-picker>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="query">查询</el-button>

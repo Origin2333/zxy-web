@@ -1,7 +1,7 @@
 <template>
     <div class="index">
         <div class="left-filter">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="涉及部门" prop="departmentId">
                     <el-select v-model="ruleForm.departmentId" filterable placeholder="请选择" style="width: 100%;" clearable>
                         <el-option

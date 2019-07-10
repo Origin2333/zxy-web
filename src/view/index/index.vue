@@ -242,12 +242,16 @@ export default {
 <style lang="scss" scoped>
 .index{
     display: flex;
+    box-sizing:border-box;
+    height: 100%;
     .left-filter{
         width:442px;
-        height: 100vh;
+        height: 100%;
+        overflow-y: auto;
         background:rgba(234,237,241,1);
         text-align: center;
-        padding: 20px;
+        padding: 20px 20px;
+        box-sizing:border-box;
         .select{
             width: 400px;
             margin: 0 auto;
@@ -270,8 +274,10 @@ export default {
         }
     }
     .right-charts{
-        flex-grow: 1;
+        // flex-grow: 1;
+        width: calc(100% - 442px);
         text-align: center;
+        box-sizing:border-box;
         .chart1{
             display: inline-block;
             width: 48%;

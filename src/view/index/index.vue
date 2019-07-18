@@ -5,11 +5,6 @@
                 <el-select
                     v-model="lawName"
                     filterable
-                    remote
-                    reserve-keyword
-                    placeholder="请输入关键词"
-                    :remote-method="remoteMethod"
-                    :loading="loading"
                     style="width:100%;"
                     @change="querylawById">
                     <el-option
@@ -56,27 +51,21 @@ export default {
         }
     },
     mounted () {
+        Axios.get('/law/getLawList')
+        .then(res => {
+            this.lawNames = res.data.data
+        })
         this.myChart = echarts.init(this.$refs.lawChart);
         this.keyWordChart = echarts.init(this.$refs.keyWordChart);
         this.departmentChart = echarts.init(this.$refs.departmentChart);
         this.sonLawChart = echarts.init(this.$refs.sonLawChart);
     },
     methods: {
-        remoteMethod (query) {
-            var _this = this
-            if (query !== '') {
-                this.loading = true
-                Axios.get('/law/getLawList?name=' + query)
-                .then(res => {
-                    this.loading = false
-                    _this.lawNames = res.data.data
-                })
-            }
-        },
         querylawById (id) {
             Axios.get('/law/getLawDetail?id=' + id)
             .then(res => {
                 let result = res.data.data;
+                this.lawTree = [];
                 this.lawTree.push({
                     name: result.name,
                     children: []
@@ -110,7 +99,7 @@ export default {
                 this.lawTree[0].children.push({
                     name: '施行时间',
                     children: [{
-                        name: result.time
+                        name: result.time ? new Date().Format('yyyy-MM-dd') : '暂无'
                     }]
                 })
                 this.lawTree[0].children.push({
@@ -166,6 +155,7 @@ export default {
             function clickFun (param) {
                 _this.clickNode(param.data)
             }
+            this.myChart.off('click');
             this.myChart.on('click', clickFun);
         },
         clickNode (node) {

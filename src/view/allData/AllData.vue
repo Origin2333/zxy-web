@@ -53,7 +53,7 @@ export default {
                 }
             ]
         };
-        Axios.get('/law/getAllData')
+        Axios.get('/law/getAllData?level="一般法律"')
         .then(res => {
             option.series[0].data = res.data.data.node;
             res.data.data.links.map((e, index) => {

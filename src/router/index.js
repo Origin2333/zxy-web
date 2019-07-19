@@ -14,6 +14,7 @@ export default new Router({
       name: 'mainPage',
       component: MainPage,
       children: [
+        {path: '/', name: 'index', component: index},
         {path: '/index', name: 'index', component: index},
         {path: '/aboutLaws', name: 'aboutLaws', component: AboutLaws},
         {path: '/allData', name: 'allData', component: AllData}

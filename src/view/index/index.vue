@@ -26,9 +26,9 @@
         </div>
         <div class="right-charts">
             <div class="chart1" ref="lawChart"></div>
-            <div class="chart2" ref="keyWordChart"></div>
+            <div class="chart2" ref="keyWordChart"><p>{{lawDesc}}</p></div>
             <div class="chart3" ref="departmentChart"></div>
-            <div class="chart4" ref="sonLawChart"></div>
+            <div class="chart4" ref="keyWordChart"></div>
         </div>
     </div>
 </template>
@@ -42,6 +42,7 @@ export default {
         return {
             lawName: '',
             lawNames: [],
+            lawDesc: '',
             loading: true,
             lawTree: [],
             defaultProps: {
@@ -76,6 +77,7 @@ export default {
                         name: result.content
                     }]
                 })
+                this.lawDesc = result.content;
                 this.lawTree[0].children.push({
                     name: '立法主体',
                     children: [{
@@ -169,8 +171,8 @@ export default {
                     {
                         type: 'tree',
                         data: [],
-                        top: '18%',
-                        bottom: '14%',
+                        top: '20%',
+                        bottom: '20%',
                         layout: 'radial',
                         symbol: 'emptyCircle',
                         symbolSize: 7,
@@ -212,18 +214,18 @@ export default {
                     this.departmentChart.setOption(option);
                 })
             }
-            if (node.hasOwnProperty('lawId')) {
-                Axios.get('/law/getLawListByLawId?lawId=' + node.lawId)
-                .then(res => {
-                    var data = [{
-                        name: node.name,
-                        children: res.data.data ? res.data.data : []
-                    }]
-                    option.series[0].data = data;
-                    this.sonLawChart.clear();
-                    this.sonLawChart.setOption(option);
-                })
-            }
+            // if (node.hasOwnProperty('lawId')) {
+            //     Axios.get('/law/getLawListByLawId?lawId=' + node.lawId)
+            //     .then(res => {
+            //         var data = [{
+            //             name: node.name,
+            //             children: res.data.data ? res.data.data : []
+            //         }]
+            //         option.series[0].data = data;
+            //         this.sonLawChart.clear();
+            //         this.sonLawChart.setOption(option);
+            //     })
+            // }
         }
     }
 }
@@ -274,6 +276,7 @@ export default {
             height: 50%;
             border: 1px solid rgba(234,237,241,1);
             text-align: left;
+            vertical-align: middle;
         }
         .chart2{
             display: inline-block;
@@ -281,6 +284,11 @@ export default {
             height: 50%;
             border: 1px solid rgba(234,237,241,1);
             text-align: left;
+            vertical-align: middle;
+            p {
+                padding: 20px;
+                line-height: 24px;
+            }
         }
         .chart3{
             display: inline-block;
@@ -288,6 +296,7 @@ export default {
             height: 50%;
             border: 1px solid rgba(234,237,241,1);
             text-align: left;
+            vertical-align: middle;
         }
         .chart4{
             display: inline-block;
@@ -295,6 +304,7 @@ export default {
             height: 50%;
             border: 1px solid rgba(234,237,241,1);
             text-align: left;
+            vertical-align: middle;
         }
     }
 }

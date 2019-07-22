@@ -92,6 +92,7 @@ export default {
     },
     methods: {
         query() {
+            var _this = this;
             var option = {
                 title: {
                     top: 'bottom',
@@ -138,6 +139,20 @@ export default {
                 option.series[0].links = res.data.data.links;
                 console.log(option);
                 this.myChart.setOption(option);
+                function clickFun (param) {
+                    if (param.dataType == 'edge') return;
+                    option.series[0].data = option.series[0].data.map(e => {
+                        if (e.id == param.data.id) {
+                            e.label.normal.show = !e.label.normal.show;
+                            return e;
+                        }
+                        return e;
+                    })
+                    _this.myChart.clear();
+                    _this.myChart.setOption(option);
+                }
+                this.myChart.off('click');
+                this.myChart.on('click', clickFun);
             })
         }
     }

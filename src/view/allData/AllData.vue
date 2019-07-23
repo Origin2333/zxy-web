@@ -125,7 +125,7 @@ export default {
                             }
                         },
                         force: {
-                            repulsion: 100
+                            repulsion: 200
                         }
                     }
                 ]

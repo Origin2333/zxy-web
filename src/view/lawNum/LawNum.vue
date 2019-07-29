@@ -132,7 +132,8 @@ export default {
                         textStyle: {
                             color: '#999'
                         }
-                    }
+                    },
+                    max: yMax
                 },
                 dataZoom: [
                     {
@@ -180,14 +181,19 @@ export default {
             };
             Axios.get('/law/getLawNum?' + qs.stringify(this.ruleForm))
             .then(res => {
-                debugger
+                yMax = 0;
                 res.data.data.forEach(e => {
                     dataAxis.push(e.time);
                     data.push(e.cnt)
+                    if (e.cnt > yMax) {
+                        yMax = e.cnt;
+                    }
                 })
+                yMax = Math.ceil(yMax / 10) * 10
                 for (var i = 0; i < data.length; i++) {
                     dataShadow.push(yMax);
                 }
+                option.yAxis.max = yMax;
                 var zoomSize = 6;
                 _this.myChart.clear();
                 _this.myChart.setOption(option);

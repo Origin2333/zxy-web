@@ -4,6 +4,7 @@ import index from '@/view/index/index'
 import AboutLaws from '@/view/aboutLaws/AboutLaws'
 import MainPage from '@/view/mainPage/MainPage'
 import AllData from '@/view/allData/AllData'
+import LawNum from '@/view/lawNum/LawNum'
 
 Vue.use(Router)
 
@@ -17,7 +18,8 @@ export default new Router({
         {path: '/', name: 'index', component: index},
         {path: '/index', name: 'index', component: index},
         {path: '/aboutLaws', name: 'aboutLaws', component: AboutLaws},
-        {path: '/allData', name: 'allData', component: AllData}
+        {path: '/allData', name: 'allData', component: AllData},
+        {path: '/lawNum', name: 'lawNum', component: LawNum}
       ]
     }
   ]

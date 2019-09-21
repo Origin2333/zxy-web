@@ -22,7 +22,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="施用范围" prop="level">
+                <el-form-item label="效力等级" prop="level">
                     <el-select v-model="ruleForm.level" filterable placeholder="请选择" style="width: 100%;" clearable>
                         <el-option
                         v-for="item in levels"
@@ -32,7 +32,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="效力等级" prop="scope">
+                <el-form-item label="施用范围" prop="scope">
                     <el-select v-model="ruleForm.scope" filterable placeholder="请选择" style="width: 100%;" clearable>
                         <el-option
                         v-for="item in scopes"
@@ -41,6 +41,15 @@
                         :value="item.id">
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="规定范围" prop="limit">
+                    <el-cascader
+                    style="width: 100%;"
+                    v-model="ruleForm.limit"
+                    :options="limits"
+                    :props="props"
+                    collapse-tags
+                    clearable></el-cascader>
                 </el-form-item>
                 <el-form-item label="开始时间" prop="startTime">
                     <el-date-picker type="date" placeholder="选择日期" value-format='yyyy-MM-dd' v-model="ruleForm.startTime" style="width: 100%;"></el-date-picker>
@@ -77,16 +86,23 @@ export default {
             departmentIds: [],
             keyWordIds: [],
             levels: [],
-            scopes: []
+            scopes: [],
+            limits: [],
+            props: {
+                multiple: true,
+                value: 'id',
+                label: 'name'
+            }
         }
     },
     mounted() {
-        Axios.all([Axios.get('/law/getDepartmentList'), Axios.get('/law/getKeyWordList'), Axios.get('/law/getLevel'), Axios.get('/law/getScope')])
-        .then(Axios.spread((res1, res2, res3, res4) => {
+        Axios.all([Axios.get('/law/getDepartmentList'), Axios.get('/law/getKeyWordList'), Axios.get('/law/getLevel'), Axios.get('/law/getScope'), Axios.get('/law/getLimit')])
+        .then(Axios.spread((res1, res2, res3, res4, res5) => {
             this.departmentIds = res1.data.data;
             this.keyWordIds = res2.data.data;
             this.levels = res3.data.data;
             this.scopes = res4.data.data;
+            this.limits = res5.data.data;
         }))
         this.myChart = Echarts.init(document.getElementById('AllData'));
     },
@@ -98,13 +114,16 @@ export default {
             var yMax = 200;
             var dataShadow = [];
             var option = {
-                // title: {
-                //     text: '特性示例：渐变色 阴影 点击缩放',
-                //     subtext: 'Feature Sample: Gradient Color, Shadow, Click Zoom'
-                // },
+                title: {
+                    text: '统计图',
+                    subtext: '',
+                    top: '20px',
+                    x: 'center'
+                },
                 tooltip: {},
                 grid: {
-                    bottom: '20%'
+                    bottom: '5%',
+                    top: '10%'
                 },
                 xAxis: {
                     data: dataAxis,
@@ -179,16 +198,28 @@ export default {
                     }
                 ]
             };
+            this.ruleForm.limit1 = this.ruleForm.limit.filter(e => {
+                return e[0] === "limit_department"
+            }).map(e => e[1]).toString();
+            this.ruleForm.limit2 = this.ruleForm.limit.filter(e => {
+                return e[0] === "limit_progress"
+            }).map(e => e[1]).toString();
+            this.ruleForm.limit3 = this.ruleForm.limit.filter(e => {
+                return e[0] === "limit_subject"
+            }).map(e => e[1]).toString();
             Axios.get('/law/getLawNum?' + qs.stringify(this.ruleForm))
             .then(res => {
                 yMax = 0;
+                let count = 0
                 res.data.data.forEach(e => {
+                    count += e.cnt
                     dataAxis.push(e.time);
                     data.push(e.cnt)
                     if (e.cnt > yMax) {
                         yMax = e.cnt;
                     }
                 })
+                option.title.subtext = '共计' + count + '条';
                 yMax = Math.ceil(yMax / 10) * 10
                 for (var i = 0; i < data.length; i++) {
                     dataShadow.push(yMax);

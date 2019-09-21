@@ -9,10 +9,10 @@
             background-color="transparent"
             text-color="#fff"
             active-text-color="#00F0FF">
-            <el-menu-item index="/index">法规关系图一</el-menu-item>
-            <el-menu-item index="/aboutLaws">法规关系图二</el-menu-item>
-            <el-menu-item index="/allData">法规关系图三</el-menu-item>
-            <el-menu-item index="/lawNum">法规关系图四</el-menu-item>
+            <el-menu-item index="/index">概览图</el-menu-item>
+            <!-- <el-menu-item index="/aboutLaws">法规关系图二</el-menu-item> -->
+            <el-menu-item index="/allData">关系挖掘图</el-menu-item>
+            <el-menu-item index="/lawNum">统计图</el-menu-item>
         </el-menu>
     </div>
 </template>

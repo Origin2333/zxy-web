@@ -130,7 +130,8 @@ export default {
                 startTime: '',
                 endTime: '',
                 level: '',
-                scope: ''
+                scope: '',
+                limit: []
             },
             departmentIds: [],
             keyWordIds: [],
